@@ -2,7 +2,7 @@
 from sqlalchemy.orm import Session
 
 # Import SessionLocal to create a database session
-from database import SessionLocal
+from database import Sessionlocal
 
 # Import the User model
 from models import User
@@ -18,7 +18,7 @@ def create_default_admin():
     """
 
     # Create a new database session
-    db: Session = SessionLocal()
+    db: Session = Sessionlocal()
 
     try:
         # Check whether an admin user already exists
@@ -33,10 +33,10 @@ def create_default_admin():
         new_admin = User(
 
             # Default username
-            username="admin",
+            username="vijay",
 
             # Default email
-            email="admin@example.com",
+            email="vijay@example.com",
 
             # Store the password in hashed form (Never store plain text passwords)
             hashed_password=get_password_hash("Admin@123"),
