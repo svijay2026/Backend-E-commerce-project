@@ -4,7 +4,8 @@ from sqlalchemy import create_engine  # we importing class variable from sqlalch
 from sqlalchemy.orm import sessionmaker , declarative_base
 # we importing classes from sqlalchemy module that is ORM(object relational mapping)
 
-DATABASE_URL = "mysql+pymysql://root:1234@localhost:3306/ecommerece"  # Creating url to connect with database from python
+# DATABASE_URL = "mysql+pymysql://root:1234@localhost:3306/ecommerece"  # Creating url to connect with database from python
+DATABASE_URL = "mysql+pymysql://avnadmin:AVNS_3uWO5ugQo8TQ0Qu89PL@mysql-23982339-surivijaykumar6969-cccc.k.aivencloud.com:17554/defaultdb"
 
 engine = create_engine(DATABASE_URL)  
 # creating connection through create_engine class with database_url(creating object name engine from class create_engine)
