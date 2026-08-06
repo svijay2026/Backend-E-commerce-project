@@ -1,4 +1,4 @@
-# Import Session class for database session type hint
+# Import Session for database session type hint
 from sqlalchemy.orm import Session
 
 # Import SessionLocal to create a database session
@@ -7,58 +7,65 @@ from database import Sessionlocal
 # Import the User model
 from models import User
 
-# Import the password hashing function
-# Replace get_password_hash with your actual function name if it is different.
-from auth import get_password_hash
+# Import bcrypt for password hashing
+import bcrypt
 
 
 def create_default_admin():
     """
-    Creates the first admin account only if an admin does not already exist.
+    Create a default admin account only if one does not already exist.
     """
 
     # Create a new database session
     db: Session = Sessionlocal()
 
     try:
-        # Check whether an admin user already exists
+        # Check whether any user with role 'admin' already exists
         admin = db.query(User).filter(User.role == "admin").first()
 
-        # If an admin already exists, stop the function
+        # If an admin is already present, stop the function
         if admin:
             print("Admin already exists.")
             return
 
-        # Create a new admin user object
+        # Convert the plain text password into a hashed password
+        # Never store plain text passwords in the database
+        hashed_password = bcrypt.hashpw(
+            "Admin@123".encode("utf-8"),   # Convert password string into bytes
+            bcrypt.gensalt()               # Generate a random salt
+        ).decode("utf-8")                  # Convert hashed bytes back to string
+
+        # Create a new User object for the default admin
         new_admin = User(
 
             # Default username
-            username="vijay",
+            username="Vijay",
 
             # Default email
             email="vijay@example.com",
 
-            # Store the password in hashed form (Never store plain text passwords)
-            hashed_password=get_password_hash("Admin@123"),
+            # Store the hashed password
+            hashed_password=hashed_password,
 
-            # Assign admin role
+            # Assign the admin role
             role="admin",
 
             # Mark the account as active
             is_active=True
         )
 
-        # Add the admin object to the session
+        # Add the admin object to the database session
         db.add(new_admin)
 
         # Save the record permanently in the database
         db.commit()
 
-        # Refresh the object so it contains the latest database values
+        # Refresh the object so it contains the latest values from the database
         db.refresh(new_admin)
 
         print("Default admin created successfully.")
 
     finally:
         # Always close the database session
+        # This prevents connection leaks
         db.close()
