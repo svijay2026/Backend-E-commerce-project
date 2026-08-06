@@ -1,13 +1,15 @@
 from fastapi import FastAPI                 # Import FastAPI to create the backend application instance.
 from routers import categories,products,user     # Import API routers to register different resource endpoints with the FastAPI application.
+from create_admin import create_default_admin
+
 
 # For creating table structure in database from python
 
 from database import Base,engine
 from models import Base
-import models
 
 Base.metadata.create_all(bind=engine)   # line used to create table structure using model module from python in mysql
+create_default_admin()
 
 
 app=FastAPI()          # Create the main FastAPI application instance.
